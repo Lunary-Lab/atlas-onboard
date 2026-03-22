@@ -1,11 +1,8 @@
-# Gitleaks configuration - using default rules with allowlist for test credentials
-title = "Atlas Bootstrap Gitleaks Config"
-
 [allowlist]
-description = "Allowlist for known test credentials used in E2E tests"
-regexes = [
-  '''AGE-SECRET-KEY-1TESTKEY123456789012345678901234567890123456789012345678901234567890''',
-  '''test-master-password-12345''',
-  '''test-shared-secret-67890'''
+paths = [
+    '''poetry\.lock''',
+    '''uv\.lock''',
+    '''.*\.lock''',
+    '''tests/e2e/setup_e2e_env\.sh''',
+    '''payload/tests/e2e/setup_e2e_env\.sh'''
 ]
-
