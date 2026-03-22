@@ -121,6 +121,8 @@ jobs:
           files: |
             payload/dist/*.tar.gz
             payload/dist/*.whl
+            bootstrap.sh
+            bootstrap.ps1
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
           body: "Automated release of Atlas Bootstrap payload."
