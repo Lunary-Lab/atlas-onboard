@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "atlasonboard"
+name = "atlas_onboard"
 version = "0.3.13"
 description = "Atlas Bootstrap: Two-gate workstation bootstrap utility."
 authors = [{ name = "Atlas", email = "dev@atlas.dev" }]
@@ -37,10 +37,10 @@ Homepage = "https://github.com/atlas/atlas-onboard"
 Issues = "https://github.com/atlas/atlas-onboard/issues"
 
 [project.scripts]
-atlasonboard = "atlasonboard.cli:app"
+atlas_onboard = "atlas_onboard.cli:app"
 
 [tool.hatch.version]
-path = "src/atlasonboard/__init__.py"
+path = "src/atlas_onboard/__init__.py"
 
 [tool.ruff]
 line-length = 88
