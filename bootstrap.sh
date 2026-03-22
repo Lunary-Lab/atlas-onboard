@@ -8,7 +8,7 @@ set -euf
 
 # --- Configuration ---
 APP_VERSION="0.1.26"
-PAYLOAD_URL="https://github.com/Lunary-Lab/atlas-onboard/releases/download/v0.1.27/payload.tar.gz"
+PAYLOAD_URL="https://github.com/Lunary-Lab/atlas-onboard/releases/download/v0.1.28/payload.tar.gz"
 PAYLOAD_SHA256="7c8aaf68707d86f41d55968416af9810867df9bbb62e9910863b3e60360637a1"
 # ---
 

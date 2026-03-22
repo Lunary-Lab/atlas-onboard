@@ -24,7 +24,7 @@ jobs:
       - name: Add uv to PATH
         run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       - name: Set up test environment
-        working-directory: atlas-onboard/payload
+        working-directory: payload
         run: |
           uv venv
           source .venv/bin/activate
@@ -33,10 +33,10 @@ jobs:
           uv pip install pytest docker
       - name: Test bootstrap script structure
         run: |
-          cd atlas-onboard && bash payload/tests/e2e/test_bootstrap_script.sh
+          bash payload/tests/e2e/test_bootstrap_script.sh
       
       - name: Run E2E tests (isolated - macOS)
-        working-directory: atlas-onboard/payload
+        working-directory: payload
         env:
           TEST_MASTER_PASSWORD: "test-master-password-12345"
           TEST_SHARED_SECRET: "test-shared-secret-67890"
@@ -45,7 +45,7 @@ jobs:
           # Test bootstrap flow on macOS (keychain integration)
           pytest tests/e2e/test_bootstrap_flow.py -v --tb=short -m e2e -k "not docker" || echo "Docker tests skipped on macOS"
       - name: Run Full System E2E tests (REQUIRED for release)
-        working-directory: atlas-onboard/payload
+        working-directory: payload
         env:
           E2E_MASTER_PASSWORD: ${{ secrets.E2E_MASTER_PASSWORD }}
           E2E_SHARED_SECRET: ${{ secrets.E2E_SHARED_SECRET }}
@@ -101,7 +101,7 @@ jobs:
         run: echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       
       - name: Set up build environment
-        working-directory: atlas-onboard/payload
+        working-directory: payload
         run: |
           uv venv
           source .venv/bin/activate
@@ -110,7 +110,7 @@ jobs:
           uv pip install build
       
       - name: Build bootstrap payload
-        working-directory: atlas-onboard/payload
+        working-directory: payload
         run: |
           source .venv/bin/activate
           python -m build
@@ -119,8 +119,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            atlas-onboard/payload/dist/*.tar.gz
-            atlas-onboard/payload/dist/*.whl
+            payload/dist/*.tar.gz
+            payload/dist/*.whl
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
           body: "Automated release of Atlas Bootstrap payload."
