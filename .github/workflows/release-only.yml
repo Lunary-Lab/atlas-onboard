@@ -29,7 +29,7 @@ jobs:
       - name: Create payload archive
         run: |
           mkdir -p release
-          tar -czf release/payload.tar.gz -C payload .
+          tar -czf release/payload.tar.gz -C atlas-onboard/payload .
       
       - name: Calculate checksums
         id: checksums
@@ -38,7 +38,7 @@ jobs:
           SHA256_TAR=$(sha256sum payload.tar.gz | cut -d' ' -f1)
           echo "SHA256_TAR=$SHA256_TAR" >> $GITHUB_ENV
           
-          echo "SHA256 Checksums for Atlas Onboard version ${{ env.VERSION }}" > checksums.txt
+          echo "SHA256 Checksums for Atlas Bootstrap version ${{ env.VERSION }}" > checksums.txt
           echo "--------------------------------------------------" >> checksums.txt
           echo "$SHA256_TAR  payload.tar.gz" >> checksums.txt
       
@@ -49,14 +49,14 @@ jobs:
           SHA256="${{ env.SHA256_TAR }}"
           
           # Update bootstrap.sh
-          sed -i "s|^APP_VERSION=\".*\"|APP_VERSION=\"$VERSION_NO_V\"|" bootstrap.sh
-          sed -i "s|^PAYLOAD_URL=\".*\"|PAYLOAD_URL=\"https://github.com/Lunary-Lab/atlas-onboard/releases/download/$VERSION/payload.tar.gz\"|" bootstrap.sh
-          sed -i "s|^PAYLOAD_SHA256=\".*\"|PAYLOAD_SHA256=\"$SHA256\"|" bootstrap.sh
+          sed -i "s|^APP_VERSION=\".*\"|APP_VERSION=\"$VERSION_NO_V\"|" atlas-onboard/bootstrap.sh
+          sed -i "s|^PAYLOAD_URL=\".*\"|PAYLOAD_URL=\"https://github.com/Lunary-Lab/atlas-onboard/releases/download/$VERSION/payload.tar.gz\"|" atlas-onboard/bootstrap.sh
+          sed -i "s|^PAYLOAD_SHA256=\".*\"|PAYLOAD_SHA256=\"$SHA256\"|" atlas-onboard/bootstrap.sh
           
           # Update bootstrap.ps1
-          sed -i "s|^\\\$APP_VERSION = \".*\"|\\\$APP_VERSION = \"$VERSION_NO_V\"|" bootstrap.ps1
-          sed -i "s|^\\\$PAYLOAD_URL = \".*\"|\\\$PAYLOAD_URL = \"https://github.com/Lunary-Lab/atlas-onboard/releases/download/$VERSION/payload.tar.gz\"|" bootstrap.ps1
-          sed -i "s|^\\\$PAYLOAD_SHA256 = \".*\"|\\\$PAYLOAD_SHA256 = \"$SHA256\"|" bootstrap.ps1
+          sed -i "s|^\\\$APP_VERSION = \".*\"|\\\$APP_VERSION = \"$VERSION_NO_V\"|" atlas-onboard/bootstrap.ps1
+          sed -i "s|^\\\$PAYLOAD_URL = \".*\"|\\\$PAYLOAD_URL = \"https://github.com/Lunary-Lab/atlas-onboard/releases/download/$VERSION/payload.tar.gz\"|" atlas-onboard/bootstrap.ps1
+          sed -i "s|^\\\$PAYLOAD_SHA256 = \".*\"|\\\$PAYLOAD_SHA256 = \"$SHA256\"|" atlas-onboard/bootstrap.ps1
       
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
@@ -64,12 +64,12 @@ jobs:
           files: |
             release/payload.tar.gz
             release/checksums.txt
-            bootstrap.sh
-            bootstrap.ps1
+            atlas-onboard/bootstrap.sh
+            atlas-onboard/bootstrap.ps1
           tag_name: ${{ env.VERSION }}
           name: Release ${{ env.VERSION }}
           body: |
-            Atlas Onboard version ${{ env.VERSION }}
+            Atlas Bootstrap version ${{ env.VERSION }}
             
             ## SHA256 Checksums
             ```
