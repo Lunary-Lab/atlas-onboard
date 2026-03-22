@@ -189,7 +189,7 @@ jobs:
           
           # Scan all extracted artifacts (use --no-git since artifacts aren't a git repo)
           if [ -d "/tmp/artifacts" ] && [ "$(find /tmp/artifacts -type d -name 'extracted_*' | head -1)" ]; then
-            gitleaks detect --source /tmp/artifacts --no-git --config .gitleaks.toml --verbose --redact --exit-code 1 || {
+            gitleaks detect --source /tmp/artifacts --no-git --config ${{ github.workspace }}/.gitleaks.toml --verbose --redact --exit-code 1 || {
               echo "❌ Secrets detected in release artifacts!"
               exit 1
             }
