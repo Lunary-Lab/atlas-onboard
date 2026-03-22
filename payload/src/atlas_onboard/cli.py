@@ -1,7 +1,6 @@
 # src/atlasonboard/cli.py
 """Command-line interface for Atlas Bootstrap."""
 
-import os
 import ssl
 import sys
 
@@ -14,7 +13,7 @@ from . import __version__, config, errors, paths as paths_lib
 from .errors import ConfigError, AtlasError, SealreposError
 
 app = typer.Typer(
-    name="atlasonboard",
+    name="atlas_onboard",
     help="Atlas Bootstrap: A two-gate workstation bootstrap utility.",
     add_completion=False,
 )
@@ -111,11 +110,7 @@ def run(
         # We need the Master Password to decrypt the age key.
         # It's also used for other secrets potentially, but primarily for the root of trust.
         console.print("\n🔐 [bold]Authenticating User...[/bold]")
-        master_password = os.environ.get("ATLAS_ONBOARD_PASSWORD")
-        if master_password:
-            console.print("[green]\u2713[/green] Master Password loaded from environment (ATLAS_ONBOARD_PASSWORD).")
-        else:
-            master_password = Prompt.ask("Enter Master Password", password=True)
+        master_password = Prompt.ask("Enter Master Password", password=True)
 
         # Store Master Password in memory/env for subsequent steps if needed,
         # but ideally we just use it to decrypt the age key now.
