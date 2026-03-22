@@ -74,6 +74,11 @@ def get_or_set_device_secret() -> str:
     macOS will prompt the user for permission. Users should click
     "Always Allow" to avoid repeated prompts.
     """
+    secret = os.environ.get("ATLAS_ONBOARD_TWO_FACTOR_SECRET")
+    if secret:
+        console.print("[green]\u2713[/green] Device authorized (Secret loaded from ATLAS_ONBOARD_TWO_FACTOR_SECRET environment variable)")
+        return secret
+
     secret = None
     if _should_use_keyring():
         try:
