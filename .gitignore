@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.idea/
+.vscode/
+
+# Atlas Bootstrap
+payload.tar.zst
+payload.tar.gz
+payload.zip
+bootstrap_local_test.sh
+downloads/
+release-*/
+.sb_cache/
+.sb_state/
+.sb_data/
+.sb_config/
+**/plaintext_keys/
+*.log

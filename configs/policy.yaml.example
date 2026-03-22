@@ -1,0 +1,19 @@
+# Atlas Bootstrap - Filesystem Policy
+# This file defines the default path inclusion and exclusion rules.
+# It is used by the policy engine to prevent the bootstrap process
+# from accessing unauthorized locations.
+
+# By default, no paths are explicitly included. This means the bootstrap
+# operates in a "deny by default" mode, only allowing writes to its own
+# managed directories within XDG_DATA_HOME, XDG_CACHE_HOME, etc.
+include: []
+
+# A list of paths to explicitly exclude. This list takes precedence over
+# the include list.
+#
+# The default policy is to FORBID access to the user's workspace directory
+# to prevent accidental code modification or data loss.
+exclude:
+  - "${HOME}/workspace/**"
+  - "${HOME}/Documents/**"
+  - "${HOME}/Downloads/**"

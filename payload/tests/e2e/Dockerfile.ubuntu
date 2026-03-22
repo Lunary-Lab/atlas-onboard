@@ -1,0 +1,50 @@
+# Dockerfile.ubuntu
+FROM ubuntu:22.04
+
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    python3.11 \
+    python3.11-venv \
+    curl \
+    git \
+    ssh \
+    zstd \
+    openssh-server \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a non-root user
+RUN useradd -m -s /bin/bash tester
+# Set up SSH for the user
+RUN mkdir -p /home/tester/.ssh && \
+    chmod 700 /home/tester/.ssh && \
+    chown -R tester:tester /home/tester/.ssh
+
+USER tester
+WORKDIR /home/tester
+
+# Install uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH="/home/tester/.cargo/bin:${PATH}"
+
+# Copy the application payload and test assets
+COPY --chown=tester:tester ./atlas-onboard/payload /app/payload
+COPY --chown=tester:tester ./atlas-onboard/payload/tests/e2e/setup_e2e_env.sh /app/setup_e2e_env.sh
+
+# Run the setup script to prepare the E2E environment
+USER root
+RUN chmod +x /app/setup_e2e_env.sh && /app/setup_e2e_env.sh
+USER tester
+
+# Set up the Python environment for the application
+WORKDIR /app/payload
+RUN uv venv && \
+    . .venv/bin/activate && \
+    uv pip sync requirements.lock && \
+    uv pip install -e .
+
+# Create encrypted age key for testing after venv is ready
+RUN . .venv/bin/activate && python3 -c "import sys; from pathlib import Path; sys.path.insert(0, str(Path('/app/payload/src'))); from atlasonboard.security import encrypt_data; MASTER_PASSWORD = 'test-master-password-12345'; SHARED_SECRET = 'test-shared-secret-67890'; AGE_KEY_PLAINTEXT = 'AGE-SECRET-KEY-1TESTKEY123456789012345678901234567890123456789012345678901234567890\n'; encrypted_data = encrypt_data(AGE_KEY_PLAINTEXT.encode('utf-8'), MASTER_PASSWORD, SHARED_SECRET); Path('/tmp/age_key.enc').write_bytes(encrypted_data); print('✅ Created encrypted age key')"
+
+CMD ["/bin/bash"]
