@@ -372,33 +372,6 @@ def doctor(ctx: typer.Context):
     except errors.SshAgentError as e:
         console.print(f"❌ [red]SSH Agent Check Failed:[/red] {e}")
 
-    console.print(
-        f"\n[bold]Checking connectivity to OTP Gate at {cfg.otp_gate.url}...[/bold]"
-    )
-    try:
-        # Use bundled certificate if available, otherwise use system trust store
-        cert_path = paths_lib.get_otp_gate_cert_path()
-        if cert_path:
-            # Convert Path to string for httpx (trusts ONLY this self-signed certificate)
-            verify_ssl = str(cert_path)
-        else:
-            # Use truststore for system CA verification
-            verify_ssl = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-
-        with httpx.Client(timeout=5.0, verify=verify_ssl) as client:
-            response = client.get(
-                cfg.otp_gate.url.copy_with(path="/healthz")
-            )  # Use /healthz endpoint
-            if response.status_code == 200:
-                console.print(
-                    "✅ [green]Successfully connected to the OTP Gate.[/green]"
-                )
-            else:
-                console.print(
-                    f"⚠️ [yellow]Connected to OTP Gate, but got status {response.status_code}.[/yellow]"
-                )
-    except httpx.RequestError as e:
-        console.print(f"❌ [red]OTP Gate Connectivity Check Failed:[/red] {e}")
 
 
 def run_cli():

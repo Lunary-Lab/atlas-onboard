@@ -21,12 +21,6 @@ class PolicyConfig(BaseModel):
     exclude: list[str] = Field(default_factory=lambda: ["${HOME}/workspace/**"])
 
 
-class OtpGateConfig(BaseModel):
-    """Configuration for the OTP verification gate."""
-
-    url: HttpUrl
-    client_id: str
-    client_secret_env: str
 
 
 class AgeBinaryConfig(BaseModel):
@@ -87,7 +81,6 @@ class BootstrapConfig(BaseModel):
     version: int
     profile: str = "work"
     policy: PolicyConfig = Field(default_factory=PolicyConfig)
-    otp_gate: OtpGateConfig
     age: AgeConfig = Field(default_factory=lambda: AgeConfig())
     git: GitConfig
     chezmoi: ChezmoiConfig
@@ -124,20 +117,6 @@ def create_default_config() -> BootstrapConfig:
     else:
         profile = "work"  # Default to work for all platforms
 
-    # Prompt for OTP gate URL (user-specific, can't be hardcoded in public repo)
-    console.print("\n🔐 [bold]OTP Gate Configuration[/bold]")
-    console.print("Enter the URL to your OTP verification server.")
-    console.print(
-        "This will be saved to ~/.config/atlas/bootstrap.yaml for future runs."
-    )
-    otp_gate_url = Prompt.ask("OTP Gate URL", default="http://127.0.0.1:8765")
-
-    # Ensure URL has /v1/verify path
-    if not otp_gate_url.endswith("/v1/verify"):
-        otp_gate_url = otp_gate_url.rstrip("/") + "/v1/verify"
-
-    # Client secret env var name (standard)
-    client_secret_env = "SB_BOOTSTRAP_CLIENT_SECRET"
 
     # Determine system architecture for chezmoi
     machine = platform.machine().lower()
@@ -220,11 +199,6 @@ def create_default_config() -> BootstrapConfig:
     cfg = BootstrapConfig(
         version=1,
         profile=profile,
-        otp_gate=OtpGateConfig(
-            url=HttpUrl(otp_gate_url),
-            client_id="bootstrap",
-            client_secret_env=client_secret_env,
-        ),
         git=GitConfig(
             dotfiles_repo=dotfiles_repo,
             branch="main",
@@ -244,11 +218,6 @@ def create_default_config() -> BootstrapConfig:
         config_dict = {
             "version": cfg.version,
             "profile": cfg.profile,
-            "otp_gate": {
-                "url": str(cfg.otp_gate.url),
-                "client_id": cfg.otp_gate.client_id,
-                "client_secret_env": cfg.otp_gate.client_secret_env,
-            },
             "age": {
                 "binary": {
                     "version": cfg.age.binary.version,

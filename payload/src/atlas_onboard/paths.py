@@ -129,14 +129,6 @@ def get_default_config_path() -> Path:
     return get_app_config_dir() / "bootstrap.yaml"
 
 
-def get_otp_gate_cert_path() -> Path | None:
-    """Get the path to the bundled OTP gate public certificate."""
-    # Look for certificate relative to this file
-    cert_path = Path(__file__).parent / "data" / "otp_gate.crt"
-    if cert_path.exists():
-        return cert_path
-    return None
-
 
 def is_windows() -> bool:
     """Check if the current operating system is Windows."""
