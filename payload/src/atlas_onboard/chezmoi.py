@@ -75,17 +75,17 @@ def get_chezmoi_binary(config: "BootstrapConfig") -> Path:
 
         if asset_filename.endswith(".zip"):
             with zipfile.ZipFile(download_path, "r") as zipf:
-                zipf.extract(executable_name, path=bin_dir)
+                with zipf.open(executable_name) as source, open(expected_binary_path, "wb") as target:
+                    target.write(source.read())
         elif asset_filename.endswith(".tar.gz"):
             with tarfile.open(download_path, "r:gz") as tarf:
-                tarf.extract(executable_name, path=bin_dir)
+                member = tarf.extractfile(executable_name)
+                if not member:
+                    raise ChezmoiError(f"Binary '{executable_name}' not found in archive")
+                with open(expected_binary_path, "wb") as target:
+                    target.write(member.read())
         else:
             raise ChezmoiError(f"Unsupported archive format: {asset_filename}")
-
-        if paths.is_windows() and not expected_binary_path.exists():
-            extracted_path = bin_dir / executable_name
-            if extracted_path.exists():
-                extracted_path.rename(expected_binary_path)
 
         download_path.unlink()
 
