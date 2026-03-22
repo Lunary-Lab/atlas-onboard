@@ -48,15 +48,15 @@ jobs:
           VERSION_NO_V="${{ env.VERSION_NO_V }}"
           SHA256="${{ env.SHA256_TAR }}"
           
-          # Update bootstrap.sh
-          sed -i "s|^APP_VERSION=\".*\"|APP_VERSION=\"$VERSION_NO_V\"|" atlas-onboard/bootstrap.sh
-          sed -i "s|^PAYLOAD_URL=\".*\"|PAYLOAD_URL=\"https://github.com/Lunary-Lab/atlas-onboard/releases/download/$VERSION/payload.tar.gz\"|" atlas-onboard/bootstrap.sh
-          sed -i "s|^PAYLOAD_SHA256=\".*\"|PAYLOAD_SHA256=\"$SHA256\"|" atlas-onboard/bootstrap.sh
+          # Update onboard.sh
+          sed -i "s|^APP_VERSION=\".*\"|APP_VERSION=\"$VERSION_NO_V\"|" atlas-onboard/onboard.sh
+          sed -i "s|^PAYLOAD_URL=\".*\"|PAYLOAD_URL=\"https://github.com/Lunary-Lab/atlas-onboard/releases/download/$VERSION/payload.tar.gz\"|" atlas-onboard/onboard.sh
+          sed -i "s|^PAYLOAD_SHA256=\".*\"|PAYLOAD_SHA256=\"$SHA256\"|" atlas-onboard/onboard.sh
           
-          # Update bootstrap.ps1
-          sed -i "s|^\\\$APP_VERSION = \".*\"|\\\$APP_VERSION = \"$VERSION_NO_V\"|" atlas-onboard/bootstrap.ps1
-          sed -i "s|^\\\$PAYLOAD_URL = \".*\"|\\\$PAYLOAD_URL = \"https://github.com/Lunary-Lab/atlas-onboard/releases/download/$VERSION/payload.tar.gz\"|" atlas-onboard/bootstrap.ps1
-          sed -i "s|^\\\$PAYLOAD_SHA256 = \".*\"|\\\$PAYLOAD_SHA256 = \"$SHA256\"|" atlas-onboard/bootstrap.ps1
+          # Update onboard.ps1
+          sed -i "s|^\\\$APP_VERSION = \".*\"|\\\$APP_VERSION = \"$VERSION_NO_V\"|" atlas-onboard/onboard.ps1
+          sed -i "s|^\\\$PAYLOAD_URL = \".*\"|\\\$PAYLOAD_URL = \"https://github.com/Lunary-Lab/atlas-onboard/releases/download/$VERSION/payload.tar.gz\"|" atlas-onboard/onboard.ps1
+          sed -i "s|^\\\$PAYLOAD_SHA256 = \".*\"|\\\$PAYLOAD_SHA256 = \"$SHA256\"|" atlas-onboard/onboard.ps1
       
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
@@ -64,8 +64,8 @@ jobs:
           files: |
             release/payload.tar.gz
             release/checksums.txt
-            atlas-onboard/bootstrap.sh
-            atlas-onboard/bootstrap.ps1
+            atlas-onboard/onboard.sh
+            atlas-onboard/onboard.ps1
           tag_name: ${{ env.VERSION }}
           name: Release ${{ env.VERSION }}
           body: |

@@ -2,13 +2,13 @@
 #
 # Atlas Bootstrap - POSIX Entrypoint Stub
 #
-# sh -c "$(curl -fsSL https://.../bootstrap.sh)"
+# sh -c "$(curl -fsSL https://.../onboard.sh)"
 #
 set -euf
 
 # --- Configuration ---
 APP_VERSION="0.1.26"
-PAYLOAD_URL="https://github.com/Lunary-Lab/atlas-onboard/releases/download/v0.3.17/payload.tar.gz"
+PAYLOAD_URL="https://github.com/Lunary-Lab/atlas-onboard/releases/download/v0.3.18/payload.tar.gz"
 PAYLOAD_SHA256="7c8aaf68707d86f41d55968416af9810867df9bbb62e9910863b3e60360637a1"
 # ---
 
@@ -152,7 +152,7 @@ _add_bin_to_path() {
     _info "Adding Atlas bin directory to PATH in $PROFILE_FILE..."
     {
         echo ""
-        echo "# Atlas bin directory (added by bootstrap.sh)"
+        echo "# Atlas bin directory (added by onboard.sh)"
         # Escape the path properly to prevent injection
         ESCAPED_BIN_DIR=$(printf '%s\n' "$BIN_DIR" | sed 's/[[\.*^$()+?{|]/\\&/g')
         echo "export PATH=\"\$PATH:$ESCAPED_BIN_DIR\""

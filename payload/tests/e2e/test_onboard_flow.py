@@ -1,4 +1,4 @@
-# tests/e2e/test_bootstrap_flow.py
+# tests/e2e/test_onboard_flow.py
 import os
 import tempfile
 from pathlib import Path
@@ -24,7 +24,7 @@ def docker_client():
 
 
 @pytest.fixture(scope="module")
-def bootstrap_image(docker_client):
+def onboard_image(docker_client):
     image_tag = "atlas-onboard-e2e:latest"
     # Path to repo root (3 levels up from test file)
     repo_root = Path(__file__).parent.parent.parent.parent.parent
@@ -52,8 +52,8 @@ def bootstrap_image(docker_client):
             pass
 
 
-def test_bootstrap_flow(docker_client, bootstrap_image):
-    """Test the bootstrap flow using 2FA approach."""
+def test_onboard_flow(docker_client, onboard_image):
+    """Test the onboard flow using 2FA approach."""
     container = None
     with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
         config_path = f.name
@@ -96,7 +96,7 @@ echo -e "{TEST_SHARED_SECRET}\\n{TEST_MASTER_PASSWORD}\\n" | atlasonboard run --
 """
 
         container = docker_client.containers.run(
-            bootstrap_image,
+            onboard_image,
             command=["/bin/bash", "-c", test_script],
             detach=True,
             volumes={config_path: {"bind": "/tmp/config.yaml", "mode": "ro"}},
@@ -122,7 +122,7 @@ echo -e "{TEST_SHARED_SECRET}\\n{TEST_MASTER_PASSWORD}\\n" | atlasonboard run --
         # Check logs for success indicators
         success_indicators = [
             "Bootstrap complete",
-            "bootstrap complete",
+            "onboard complete",
             "Age identity written",
             "Age key file should exist",
         ]
@@ -135,7 +135,7 @@ echo -e "{TEST_SHARED_SECRET}\\n{TEST_MASTER_PASSWORD}\\n" | atlasonboard run --
             "test -f /home/tester/.config/chezmoi/key.txt"
         )
         assert key_file_check.exit_code == 0, (
-            "Age key file should exist after bootstrap"
+            "Age key file should exist after onboard"
         )
 
         # Verify the key file contains the expected age key format

@@ -1,13 +1,13 @@
 # Atlas Bootstrap - PowerShell Entrypoint
 #
-# $script = [System.Text.Encoding]::UTF8.GetString((Invoke-WebRequest -Uri "https://github.com/Lunary-Lab/atlas-onboard/releases/download/v0.1.0/bootstrap.ps1" -UseBasicParsing).Content); Invoke-Expression $script
+# $script = [System.Text.Encoding]::UTF8.GetString((Invoke-WebRequest -Uri "https://github.com/Lunary-Lab/atlas-onboard/releases/download/v0.1.0/onboard.ps1" -UseBasicParsing).Content); Invoke-Expression $script
 #
 
 $ErrorActionPreference = "Stop"
 
 # --- Configuration ---
 $APP_VERSION = "0.1.26"
-$PAYLOAD_URL = "https://github.com/Lunary-Lab/atlas-onboard/releases/download/v0.3.17/payload.tar.gz"
+$PAYLOAD_URL = "https://github.com/Lunary-Lab/atlas-onboard/releases/download/v0.3.18/payload.tar.gz"
 $PAYLOAD_SHA256 = "7c8aaf68707d86f41d55968416af9810867df9bbb62e9910863b3e60360637a1"
 # ---
 

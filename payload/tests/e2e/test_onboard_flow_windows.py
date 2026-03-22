@@ -1,4 +1,4 @@
-# tests/e2e/test_bootstrap_flow_windows.py
+# tests/e2e/test_onboard_flow_windows.py
 """Windows-specific E2E tests that don't require Docker."""
 import os
 import platform
@@ -18,8 +18,8 @@ TEST_SHARED_SECRET = "test-shared-secret-67890"
     platform.system() != "Windows",
     reason="Windows-specific test",
 )
-def test_bootstrap_config_loading():
-    """Test that bootstrap can load config on Windows."""
+def test_onboard_config_loading():
+    """Test that onboard can load config on Windows."""
     from atlasonboard import config
 
     # Test default config creation
@@ -53,16 +53,16 @@ def test_security_keychain_windows():
     platform.system() != "Windows",
     reason="Windows-specific test",
 )
-def test_bootstrap_ps1_syntax():
-    """Test that bootstrap.ps1 has valid PowerShell syntax."""
+def test_onboard_ps1_syntax():
+    """Test that onboard.ps1 has valid PowerShell syntax."""
     repo_root = Path(__file__).parent.parent.parent.parent.parent
-    bootstrap_ps1 = repo_root / "atlas-onboard" / "bootstrap.ps1"
+    onboard_ps1 = repo_root / "atlas-onboard" / "onboard.ps1"
 
-    if not bootstrap_ps1.exists():
-        pytest.skip("bootstrap.ps1 not found")
+    if not onboard_ps1.exists():
+        pytest.skip("onboard.ps1 not found")
 
     # Read and check basic syntax
-    content = bootstrap_ps1.read_text()
+    content = onboard_ps1.read_text()
     assert "$APP_VERSION" in content or "APP_VERSION" in content
     assert "$PAYLOAD_SHA256" in content or "PAYLOAD_SHA256" in content
 

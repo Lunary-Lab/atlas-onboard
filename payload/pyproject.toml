@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "atlas_onboard"
-version = "0.3.13"
+version = "0.3.18"
 description = "Atlas Bootstrap: Two-gate workstation bootstrap utility."
 authors = [{ name = "Atlas", email = "dev@atlas.dev" }]
 license = { text = "Proprietary" }

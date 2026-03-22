@@ -31,9 +31,9 @@ jobs:
           uv pip sync requirements.lock
           uv pip install -e .
           uv pip install pytest docker
-      - name: Test bootstrap script structure
+      - name: Test onboard script structure
         run: |
-          bash payload/tests/e2e/test_bootstrap_script.sh
+          bash payload/tests/e2e/test_onboard_script.sh
       
       - name: Run E2E tests (isolated - macOS)
         working-directory: payload
@@ -42,8 +42,8 @@ jobs:
           TEST_SHARED_SECRET: "test-shared-secret-67890"
         run: |
           source .venv/bin/activate
-          # Test bootstrap flow on macOS (keychain integration)
-          pytest tests/e2e/test_bootstrap_flow.py -v --tb=short -m e2e -k "not docker" || echo "Docker tests skipped on macOS"
+          # Test onboard flow on macOS (keychain integration)
+          pytest tests/e2e/test_onboard_flow.py -v --tb=short -m e2e -k "not docker" || echo "Docker tests skipped on macOS"
       - name: Run Full System E2E tests (REQUIRED for release)
         working-directory: payload
         env:
@@ -109,23 +109,40 @@ jobs:
           uv pip install -e .
           uv pip install build
       
-      - name: Build bootstrap payload
+      - name: Build onboard payload
         working-directory: payload
         run: |
           source .venv/bin/activate
           python -m build
+          mv dist/*.tar.gz dist/payload.tar.gz
+
+      - name: Inject Configuration into Onboard Scripts
+        run: |
+          VERSION="${{ github.ref_name }}"
+          VERSION_NO_V="${VERSION#v}"
+          SHA256=$(sha256sum payload/dist/payload.tar.gz | cut -d' ' -f1)
+          
+          # Update onboard.sh
+          sed -i "s|^APP_VERSION=\".*\"|APP_VERSION=\"$VERSION_NO_V\"|" onboard.sh
+          sed -i "s|^PAYLOAD_URL=\".*\"|PAYLOAD_URL=\"https://github.com/Lunary-Lab/atlas-onboard/releases/download/$VERSION/payload.tar.gz\"|" onboard.sh
+          sed -i "s|^PAYLOAD_SHA256=\".*\"|PAYLOAD_SHA256=\"$SHA256\"|" onboard.sh
+          
+          # Update onboard.ps1
+          sed -i "s|^\\\$APP_VERSION = \".*\"|\\\$APP_VERSION = \"$VERSION_NO_V\"|" onboard.ps1
+          sed -i "s|^\\\$PAYLOAD_URL = \".*\"|\\\$PAYLOAD_URL = \"https://github.com/Lunary-Lab/atlas-onboard/releases/download/$VERSION/payload.tar.gz\"|" onboard.ps1
+          sed -i "s|^\\\$PAYLOAD_SHA256 = \".*\"|\\\$PAYLOAD_SHA256 = \"$SHA256\"|" onboard.ps1
       
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            payload/dist/*.tar.gz
+            payload/dist/payload.tar.gz
             payload/dist/*.whl
-            bootstrap.sh
-            bootstrap.ps1
+            onboard.sh
+            onboard.ps1
           tag_name: ${{ github.ref_name }}
           name: Release ${{ github.ref_name }}
-          body: "Automated release of Atlas Bootstrap payload."
+          body: "Automated release of Atlas Onboard payload."
           draft: false
           prerelease: false
       
