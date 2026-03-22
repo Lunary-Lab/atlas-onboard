@@ -114,7 +114,8 @@ jobs:
         run: |
           source .venv/bin/activate
           python -m build
-          mv dist/*.tar.gz dist/payload.tar.gz
+          # The bootstrap scripts expect a flat archive of the payload folder, not the python sdist
+          tar --exclude='.venv' --exclude='dist' --exclude='__pycache__' --exclude='.pytest_cache' -czf dist/payload.tar.gz -C . .
 
       - name: Inject Configuration into Onboard Scripts
         run: |

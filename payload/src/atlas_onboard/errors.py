@@ -1,4 +1,4 @@
-# src/atlasonboard/errors.py
+# src/atlas_onboard/errors.py
 """Typed exceptions and exit codes for the application."""
 
 from enum import IntEnum

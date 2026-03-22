@@ -8,7 +8,7 @@ set -euf
 
 # --- Configuration ---
 APP_VERSION="0.1.26"
-PAYLOAD_URL="https://github.com/Lunary-Lab/atlas-onboard/releases/download/v0.3.20/payload.tar.gz"
+PAYLOAD_URL="https://github.com/Lunary-Lab/atlas-onboard/releases/download/v0.3.21/payload.tar.gz"
 PAYLOAD_SHA256="7c8aaf68707d86f41d55968416af9810867df9bbb62e9910863b3e60360637a1"
 # ---
 
@@ -323,8 +323,8 @@ main() {
     _info "Installing dependencies..."
     "$UV_CMD" pip sync requirements.lock --native-tls || _err "Failed to install dependencies"
 
-    _info "Installing atlasonboard package..."
-    "$UV_CMD" pip install -e . --native-tls || _err "Failed to install atlasonboard package"
+    _info "Installing atlas_onboard package..."
+    "$UV_CMD" pip install -e . --native-tls || _err "Failed to install atlas_onboard package"
     
     # Verify PyNaCl is properly installed and can import crypto_aead functions
     _info "Verifying PyNaCl installation..."
@@ -371,7 +371,7 @@ main() {
 
     _info "Starting Atlas Bootstrap application..."
     # Environment variables are automatically inherited by Python subprocess
-    .venv/bin/python -m atlasonboard.cli run "$@"
+    .venv/bin/python -m atlas_onboard.cli run "$@"
 
     _info "Cleaning up..."
     rm -rf "$TMP_DIR"

@@ -1,4 +1,4 @@
-# src/atlasonboard/util.py
+# src/atlas_onboard/util.py
 """Utility functions for checksumming, downloading, and file operations."""
 
 import hashlib

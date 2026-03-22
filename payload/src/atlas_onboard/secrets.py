@@ -1,4 +1,4 @@
-# src/atlasonboard/secrets.py
+# src/atlas_onboard/secrets.py
 """Cross-platform secret storage using keyring (macOS) with .env fallback (Windows/Linux)."""
 
 import platform

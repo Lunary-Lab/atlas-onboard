@@ -1,4 +1,4 @@
-# src/atlasonboard/policy.py
+# src/atlas_onboard/policy.py
 """Filesystem access policy enforcer."""
 
 import fnmatch

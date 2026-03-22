@@ -160,7 +160,7 @@ cd /app/payload
 source .venv/bin/activate
 
 # Run bootstrap with test infrastructure
-echo -e "{TEST_SHARED_SECRET}\\n{TEST_MASTER_PASSWORD}\\n" | atlasonboard run --config /tmp/config.yaml
+echo -e "{TEST_SHARED_SECRET}\\n{TEST_MASTER_PASSWORD}\\n" | atlas_onboard run --config /tmp/config.yaml
 '
 """
 

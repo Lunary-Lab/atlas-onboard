@@ -1,4 +1,4 @@
-# src/atlasonboard/cli.py
+# src/atlas_onboard/cli.py
 """Command-line interface for Atlas Bootstrap."""
 
 import ssl
@@ -25,7 +25,7 @@ console = Console(stderr=True)
 def version_callback(value: bool):
     """Print the version and exit."""
     if value:
-        print(f"atlasonboard version: {__version__}")
+        print(f"atlas_onboard version: {__version__}")
         raise typer.Exit()
 
 

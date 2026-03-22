@@ -1,4 +1,4 @@
-# src/atlasonboard/atlasrepos.py
+# src/atlas_onboard/atlasrepos.py
 """Installation and configuration of atlas-repos."""
 
 import os

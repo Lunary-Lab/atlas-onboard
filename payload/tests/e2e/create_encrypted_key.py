@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
-from atlasonboard.security import encrypt_data
+from atlas_onboard.security import encrypt_data
 
 MASTER_PASSWORD = "test-master-password-12345"
 SHARED_SECRET = "test-shared-secret-67890"

@@ -1,4 +1,4 @@
-# src/atlasonboard/__init__.py
+# src/atlas_onboard/__init__.py
 """Atlas Bootstrap: Two-gate workstation bootstrap utility."""
 
-__version__ = "0.3.20"
+__version__ = "0.3.21"

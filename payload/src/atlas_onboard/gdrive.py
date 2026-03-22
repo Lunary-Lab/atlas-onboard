@@ -1,4 +1,4 @@
-# src/atlasonboard/gdrive.py
+# src/atlas_onboard/gdrive.py
 """Google Drive sync setup for Atlas Bootstrap."""
 
 import json

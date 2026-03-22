@@ -1,4 +1,4 @@
-# src/atlasonboard/agent.py
+# src/atlas_onboard/agent.py
 """Manages the SSH agent (ssh-agent on POSIX, OpenSSH Agent on Windows)."""
 
 import os

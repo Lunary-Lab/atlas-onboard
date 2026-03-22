@@ -1,4 +1,4 @@
-# src/atlasonboard/logging.py
+# src/atlas_onboard/logging.py
 """Structured JSON logging with redaction."""
 
 import logging
@@ -62,7 +62,7 @@ def setup_logging(config: BootstrapConfig):
                     },
                 },
                 "loggers": {
-                    "atlasonboard": {
+                    "atlas_onboard": {
                         "handlers": ["json"],
                         "level": log_level,
                         "propagate": False,

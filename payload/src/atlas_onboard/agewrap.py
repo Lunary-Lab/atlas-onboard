@@ -1,4 +1,4 @@
-# src/atlasonboard/agewrap.py
+# src/atlas_onboard/agewrap.py
 """Wrapper for acquiring and using the 'age' binary for decryption."""
 
 import platform

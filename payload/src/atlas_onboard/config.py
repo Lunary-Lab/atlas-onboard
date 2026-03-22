@@ -1,4 +1,4 @@
-# src/atlasonboard/config.py
+# src/atlas_onboard/config.py
 """Configuration loading and validation using Pydantic."""
 
 import os

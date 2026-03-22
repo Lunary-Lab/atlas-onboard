@@ -1,4 +1,4 @@
-# src/atlasonboard/chezmoi.py
+# src/atlas_onboard/chezmoi.py
 """Wrapper for acquiring and using the 'chezmoi' binary."""
 
 import os

@@ -1,4 +1,4 @@
-# src/atlasonboard/gitwrap.py
+# src/atlas_onboard/gitwrap.py
 """Wrapper for executing Git commands securely."""
 
 import subprocess

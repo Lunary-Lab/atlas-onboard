@@ -20,7 +20,7 @@ TEST_SHARED_SECRET = "test-shared-secret-67890"
 )
 def test_onboard_config_loading():
     """Test that onboard can load config on Windows."""
-    from atlasonboard import config
+    from atlas_onboard import config
 
     # Test default config creation
     default_cfg = config.create_default_config()
@@ -35,7 +35,7 @@ def test_onboard_config_loading():
 )
 def test_security_keychain_windows():
     """Test that keychain operations work on Windows."""
-    from atlasonboard import security
+    from atlas_onboard import security
 
     # Test that get_or_set_device_secret works on Windows
     # This will prompt if not in keychain, but in CI we can test the keychain access

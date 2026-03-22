@@ -7,7 +7,7 @@ $ErrorActionPreference = "Stop"
 
 # --- Configuration ---
 $APP_VERSION = "0.1.26"
-$PAYLOAD_URL = "https://github.com/Lunary-Lab/atlas-onboard/releases/download/v0.3.20/payload.tar.gz"
+$PAYLOAD_URL = "https://github.com/Lunary-Lab/atlas-onboard/releases/download/v0.3.21/payload.tar.gz"
 $PAYLOAD_SHA256 = "7c8aaf68707d86f41d55968416af9810867df9bbb62e9910863b3e60360637a1"
 # ---
 
@@ -132,12 +132,12 @@ function Main {
     Write-Info "Installing dependencies..."
     & uv pip sync requirements.lock
     
-    Write-Info "Installing atlasonboard package..."
+    Write-Info "Installing atlas_onboard package..."
     & uv pip install -e .
     
     Write-Info "Starting Atlas Bootstrap application..."
     # Preserve environment variables (especially SB_BOOTSTRAP_CLIENT_SECRET)
-    & .venv\Scripts\python.exe -m atlasonboard.cli run @args
+    & .venv\Scripts\python.exe -m atlas_onboard.cli run @args
     
     Write-Info "Cleaning up..."
     Remove-Item -Recurse -Force $TMP_DIR

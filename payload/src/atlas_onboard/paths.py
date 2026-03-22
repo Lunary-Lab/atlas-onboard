@@ -1,4 +1,4 @@
-# src/atlasonboard/paths.py
+# src/atlas_onboard/paths.py
 """XDG Base Directory Specification compliant path resolution."""
 
 import os

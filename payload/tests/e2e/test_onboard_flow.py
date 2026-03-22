@@ -91,7 +91,7 @@ export XDG_CACHE_HOME=/home/tester/.cache
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 cd /app/payload
 source .venv/bin/activate
-echo -e "{TEST_SHARED_SECRET}\\n{TEST_MASTER_PASSWORD}\\n" | atlasonboard run --config /tmp/config.yaml
+echo -e "{TEST_SHARED_SECRET}\\n{TEST_MASTER_PASSWORD}\\n" | atlas_onboard run --config /tmp/config.yaml
 '
 """
 
