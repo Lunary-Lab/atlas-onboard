@@ -94,7 +94,7 @@ class EnvironmentError(AtlasError):
         super().__init__(message, ExitCode.ENVIRONMENT_ERROR)
 
 
-class SealreposError(AtlasError):
+class AtlasreposError(AtlasError):
     """Exception for atlas-repos installation/configuration errors."""
 
     def __init__(self, message: str):

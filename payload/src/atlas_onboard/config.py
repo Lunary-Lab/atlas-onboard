@@ -193,8 +193,8 @@ def create_default_config() -> BootstrapConfig:
             f"This is a fatal error. Please create ~/.config/atlas/bootstrap.yaml manually."
         ) from e
 
-    # Dotfiles repo is optional - will be prompted later if needed
-    dotfiles_repo = None
+    # Dotfiles repo can be supplied via environment variable
+    dotfiles_repo = os.environ.get("ATLAS_DOTFILES_REPO")
 
     cfg = BootstrapConfig(
         version=1,

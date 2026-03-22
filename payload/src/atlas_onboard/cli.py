@@ -2,6 +2,7 @@
 """Command-line interface for Atlas Bootstrap."""
 
 import ssl
+import os
 import sys
 
 import httpx
@@ -10,7 +11,7 @@ import typer
 from rich.console import Console
 
 from . import __version__, config, errors, paths as paths_lib
-from .errors import ConfigError, AtlasError, SealreposError
+from .errors import ConfigError, AtlasError, AtlasreposError
 
 app = typer.Typer(
     name="atlas_onboard",
@@ -127,7 +128,13 @@ def run(
         decrypt_age_key(ctx, master_password, shared_secret)
 
         # Apply Dotfiles (only if configured or user wants to)
-        if cfg.git.dotfiles_repo:
+        env_dotfiles_repo = os.environ.get("ATLAS_DOTFILES_REPO")
+
+        if env_dotfiles_repo:
+            console.print(f"\n📁 [bold green]Auto-applying dotfiles from environment ({env_dotfiles_repo})...[/bold green]")
+            cfg.git.dotfiles_repo = env_dotfiles_repo
+            apply_dotfiles(ctx, profile=target_profile)
+        elif cfg.git.dotfiles_repo:
             # Config has dotfiles_repo, ask user if they want to apply
             should_apply = Confirm.ask(
                 f"\n📁 Apply dotfiles from [bold cyan]{cfg.git.dotfiles_repo}[/bold cyan]?",
@@ -154,18 +161,18 @@ def run(
                 console.print("[yellow]Skipping dotfiles application.[/yellow]")
 
         # Install and configure Atlas Repos
-        from . import policy, atlasrepos
+        # from . import policy, atlasrepos
 
-        policy_manager = policy.get_policy_manager(cfg)
+        # policy_manager = policy.get_policy_manager(cfg)
 
-        try:
-            atlasrepos.install_atlasrepos(cfg, policy_manager)
-            atlasrepos.configure_atlasrepos(cfg, policy_manager)
-        except (AtlasError, SealreposError) as e:
-            console.print(
-                f"[yellow]Warning:[/yellow] Failed to install/configure Atlas Repos: {e}"
-            )
-            console.print("You can install it manually later if needed.")
+        # try:
+        #     atlasrepos.install_atlasrepos(cfg, policy_manager)
+        #     atlasrepos.configure_atlasrepos(cfg, policy_manager)
+        # except (AtlasError, AtlasreposError) as e:
+        #     console.print(
+        #         f"[yellow]Warning:[/yellow] Failed to install/configure Atlas Repos: {e}"
+        #     )
+        #     console.print("You can install it manually later if needed.")
 
         # Clone extra repos
         from . import gitwrap

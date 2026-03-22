@@ -10,7 +10,7 @@ from rich.prompt import Confirm, Prompt
 
 from . import paths
 from .config import BootstrapConfig
-from .errors import SealreposError
+from .errors import AtlasreposError
 from .gitwrap import clone
 
 console = Console(stderr=True)
@@ -76,7 +76,7 @@ def install_atlasrepos(config: BootstrapConfig, policy_manager) -> None:
 
         if not repo_url:
             # Still nothing after prompt – fail with a clear, non-leaky error
-            raise SealreposError(
+            raise AtlasreposError(
                 "Atlas Repos URL not provided. Set ATLAS_ONBOARD_REPOS_URL, "
                 "configure 'atlasrepos.repo_url' in bootstrap.yaml, or provide it interactively."
             )
@@ -88,7 +88,7 @@ def install_atlasrepos(config: BootstrapConfig, policy_manager) -> None:
     if paths.is_windows():
         install_script = repo_dir / "scripts" / "install.ps1"
         if not install_script.exists():
-            raise SealreposError(f"Install script not found at {install_script}")
+            raise AtlasreposError(f"Install script not found at {install_script}")
 
         # Run PowerShell script
         result = subprocess.run(
@@ -98,11 +98,11 @@ def install_atlasrepos(config: BootstrapConfig, policy_manager) -> None:
             text=True,
         )
         if result.returncode != 0:
-            raise SealreposError(f"Installation failed: {result.stderr}")
+            raise AtlasreposError(f"Installation failed: {result.stderr}")
     else:
         install_script = repo_dir / "scripts" / "install.sh"
         if not install_script.exists():
-            raise SealreposError(f"Install script not found at {install_script}")
+            raise AtlasreposError(f"Install script not found at {install_script}")
 
         # Make executable and run
         os.chmod(install_script, 0o755)
@@ -114,7 +114,7 @@ def install_atlasrepos(config: BootstrapConfig, policy_manager) -> None:
             env=os.environ.copy(),
         )
         if result.returncode != 0:
-            raise SealreposError(f"Installation failed: {result.stderr}")
+            raise AtlasreposError(f"Installation failed: {result.stderr}")
 
     console.print(
         "✅ [bold green]Atlas Repos installed successfully.[/bold green]"
