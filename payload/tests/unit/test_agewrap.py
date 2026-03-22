@@ -4,9 +4,9 @@ from pathlib import Path
 import pytest
 from pytest_mock import MockerFixture
 
-from atlasonboard import agewrap
-from atlasonboard.config import BootstrapConfig
-from atlasonboard.errors import AgeBinaryError
+from atlas_onboard import agewrap
+from atlas_onboard.config import BootstrapConfig
+from atlas_onboard.errors import AgeBinaryError
 
 
 @pytest.fixture
@@ -25,8 +25,8 @@ def mock_bootstrap_config(mocker: MockerFixture) -> "BootstrapConfig":
 def test_get_age_binary_found(
     mocker: MockerFixture, mock_bootstrap_config: "BootstrapConfig"
 ):
-    mocker.patch("atlasonboard.paths.get_bin_dir", return_value=Path("/fake/bin"))
-    mocker.patch("atlasonboard.paths.is_windows", return_value=False)
+    mocker.patch("atlas_onboard.paths.get_bin_dir", return_value=Path("/fake/bin"))
+    mocker.patch("atlas_onboard.paths.is_windows", return_value=False)
     mocker.patch.object(Path, "exists", return_value=True)
 
     assert agewrap.get_age_binary(mock_bootstrap_config) == Path("/fake/bin/age")
@@ -35,18 +35,18 @@ def test_get_age_binary_found(
 def test_get_age_binary_download_and_verify(
     mocker: MockerFixture, mock_bootstrap_config: "BootstrapConfig", tmp_path: Path
 ):
-    mocker.patch("atlasonboard.paths.get_bin_dir", return_value=tmp_path)
-    mocker.patch("atlasonboard.paths.is_windows", return_value=False)
-    mocker.patch("atlasonboard.agewrap._get_system_arch", return_value="linux-amd64")
+    mocker.patch("atlas_onboard.paths.get_bin_dir", return_value=tmp_path)
+    mocker.patch("atlas_onboard.paths.is_windows", return_value=False)
+    mocker.patch("atlas_onboard.agewrap._get_system_arch", return_value="linux-amd64")
 
-    mocker.patch("atlasonboard.util.download_file")
+    mocker.patch("atlas_onboard.util.download_file")
 
     checksums_content = "aabbcc  age-v1.3.1-linux-amd64.tar.gz"
     mock_httpx_get = mocker.patch("httpx.get")
     mock_httpx_get.return_value.text = checksums_content
 
-    mocker.patch("atlasonboard.util.verify_sha256")
-    mocker.patch("atlasonboard.agewrap._extract_binary")
+    mocker.patch("atlas_onboard.util.verify_sha256")
+    mocker.patch("atlas_onboard.agewrap._extract_binary")
     mocker.patch.object(Path, "unlink")
 
     binary_path = agewrap.get_age_binary(mock_bootstrap_config)
@@ -57,14 +57,14 @@ def test_get_age_binary_download_and_verify(
 def test_get_age_binary_checksum_mismatch(
     mocker: MockerFixture, mock_bootstrap_config: "BootstrapConfig", tmp_path: Path
 ):
-    mocker.patch("atlasonboard.paths.get_bin_dir", return_value=tmp_path)
-    mocker.patch("atlasonboard.agewrap._get_system_arch", return_value="linux-amd64")
-    mocker.patch("atlasonboard.util.download_file")
+    mocker.patch("atlas_onboard.paths.get_bin_dir", return_value=tmp_path)
+    mocker.patch("atlas_onboard.agewrap._get_system_arch", return_value="linux-amd64")
+    mocker.patch("atlas_onboard.util.download_file")
 
     checksums_content = "ddccbb  age-v1.3.1-linux-amd64.tar.gz"
     mocker.patch("httpx.get").return_value.text = checksums_content
 
-    mocker.patch("atlasonboard.util.verify_sha256", side_effect=AgeBinaryError("mismatch"))
+    mocker.patch("atlas_onboard.util.verify_sha256", side_effect=AgeBinaryError("mismatch"))
 
     with pytest.raises(AgeBinaryError):
         agewrap.get_age_binary(mock_bootstrap_config)

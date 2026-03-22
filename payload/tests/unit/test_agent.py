@@ -3,12 +3,12 @@ import os
 
 from pytest_mock import MockerFixture
 
-from atlasonboard import agent
+from atlas_onboard import agent
 
 
 def test_agent_manager_posix_existing(mocker: MockerFixture):
     mocker.patch.dict(os.environ, {"SSH_AUTH_SOCK": "/tmp/agent.sock"})
-    mocker.patch("atlasonboard.paths.is_windows", return_value=False)
+    mocker.patch("atlas_onboard.paths.is_windows", return_value=False)
     mock_popen = mocker.patch("subprocess.Popen")
 
     with agent.SshAgentManager():
@@ -19,7 +19,7 @@ def test_agent_manager_posix_existing(mocker: MockerFixture):
 
 def test_agent_manager_posix_start_new(mocker: MockerFixture, monkeypatch):
     monkeypatch.delenv("SSH_AUTH_SOCK", raising=False)
-    mocker.patch("atlasonboard.paths.is_windows", return_value=False)
+    mocker.patch("atlas_onboard.paths.is_windows", return_value=False)
 
     mock_proc = mocker.Mock()
     mock_proc.communicate.return_value = (
@@ -40,7 +40,7 @@ def test_agent_manager_posix_start_new(mocker: MockerFixture, monkeypatch):
 
 
 def test_agent_manager_windows_running(mocker: MockerFixture):
-    mocker.patch("atlasonboard.paths.is_windows", return_value=True)
+    mocker.patch("atlas_onboard.paths.is_windows", return_value=True)
     mock_run = mocker.patch("subprocess.run")
     mock_run.return_value.stdout = "Running"
 
@@ -51,7 +51,7 @@ def test_agent_manager_windows_running(mocker: MockerFixture):
 
 
 def test_agent_manager_windows_start_service(mocker: MockerFixture):
-    mocker.patch("atlasonboard.paths.is_windows", return_value=True)
+    mocker.patch("atlas_onboard.paths.is_windows", return_value=True)
     mock_run = mocker.patch("subprocess.run")
     mock_run.side_effect = [
         mocker.Mock(stdout="Stopped"),
@@ -67,7 +67,7 @@ def test_agent_manager_windows_start_service(mocker: MockerFixture):
 
 
 def test_agent_add_key(mocker: MockerFixture):
-    mocker.patch("atlasonboard.paths.is_windows", return_value=False)
+    mocker.patch("atlas_onboard.paths.is_windows", return_value=False)
     mock_run = mocker.patch("subprocess.run")
 
     manager = agent.SshAgentManager()

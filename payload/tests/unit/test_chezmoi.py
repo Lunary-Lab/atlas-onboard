@@ -5,8 +5,8 @@ from pathlib import Path
 import pytest
 from pytest_mock import MockerFixture
 
-from atlasonboard import chezmoi
-from atlasonboard.config import BootstrapConfig
+from atlas_onboard import chezmoi
+from atlas_onboard.config import BootstrapConfig
 
 
 @pytest.fixture
@@ -30,8 +30,8 @@ def mock_bootstrap_config(mocker: MockerFixture) -> BootstrapConfig:
 def test_get_chezmoi_binary_found(
     mocker: MockerFixture, mock_bootstrap_config: BootstrapConfig
 ):
-    mocker.patch("atlasonboard.paths.get_bin_dir", return_value=Path("/fake/bin"))
-    mocker.patch("atlasonboard.paths.is_windows", return_value=False)
+    mocker.patch("atlas_onboard.paths.get_bin_dir", return_value=Path("/fake/bin"))
+    mocker.patch("atlas_onboard.paths.is_windows", return_value=False)
 
     mocker.patch.object(Path, "exists", return_value=True)
 
@@ -42,12 +42,12 @@ def test_get_chezmoi_binary_found(
 def test_get_chezmoi_binary_download_and_verify(
     mocker: MockerFixture, mock_bootstrap_config: BootstrapConfig, tmp_path: Path
 ):
-    mocker.patch("atlasonboard.paths.get_bin_dir", return_value=tmp_path)
-    mocker.patch("atlasonboard.paths.is_windows", return_value=False)
-    mocker.patch("atlasonboard.chezmoi._get_system_arch", return_value="linux_amd64")
+    mocker.patch("atlas_onboard.paths.get_bin_dir", return_value=tmp_path)
+    mocker.patch("atlas_onboard.paths.is_windows", return_value=False)
+    mocker.patch("atlas_onboard.chezmoi._get_system_arch", return_value="linux_amd64")
 
-    mocker.patch("atlasonboard.util.download_file")
-    mocker.patch("atlasonboard.util.verify_sha256")
+    mocker.patch("atlas_onboard.util.download_file")
+    mocker.patch("atlas_onboard.util.verify_sha256")
     mocker.patch("zipfile.ZipFile")
     mocker.patch("tarfile.open")
     mocker.patch.object(Path, "unlink")

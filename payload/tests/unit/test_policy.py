@@ -4,9 +4,9 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from atlasonboard import paths
-from atlasonboard.errors import PolicyViolationError
-from atlasonboard.policy import PolicyManager
+from atlas_onboard import paths
+from atlas_onboard.errors import PolicyViolationError
+from atlas_onboard.policy import PolicyManager
 
 
 @pytest.fixture
