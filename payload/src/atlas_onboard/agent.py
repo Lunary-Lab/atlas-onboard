@@ -45,15 +45,32 @@ class SshAgentManager:
     def _start_windows_agent(self) -> None:
         """Attempt to start the Windows OpenSSH Agent service."""
         console.log("Attempting to start Windows OpenSSH Agent service...")
+        
+        script = """
+        $service = Get-Service -Name ssh-agent -ErrorAction SilentlyContinue
+        if ($service -eq $null) {
+            Write-Error "ssh-agent service not found."
+            exit 1
+        }
+        
+        try {
+            Set-Service -Name ssh-agent -StartupType Automatic
+            Start-Service ssh-agent
+            exit 0
+        } catch {
+            Write-Warning "Insufficient privileges to start ssh-agent. Attempting elevation..."
+            # Request elevation
+            $proc = Start-Process powershell -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command \`"Set-Service -Name ssh-agent -StartupType Automatic; Start-Service ssh-agent\`"" -Verb RunAs -PassThru -Wait
+            if ($proc.ExitCode -ne 0) {
+                exit $proc.ExitCode
+            }
+            exit 0
+        }
+        """
+
         try:
-            # First ensure the service is not disabled
             subprocess.run(
-                ["powershell", "-Command", "Set-Service -Name ssh-agent -StartupType Automatic"],
-                capture_output=True,
-                check=False,  # Don't strictly check as it might fail if lacking perms, let Start-Service be the real test
-            )
-            subprocess.run(
-                ["powershell", "-Command", "Start-Service ssh-agent"],
+                ["powershell", "-Command", script],
                 capture_output=True,
                 check=True,
             )
