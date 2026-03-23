@@ -46,6 +46,12 @@ class SshAgentManager:
         """Attempt to start the Windows OpenSSH Agent service."""
         console.log("Attempting to start Windows OpenSSH Agent service...")
         try:
+            # First ensure the service is not disabled
+            subprocess.run(
+                ["powershell", "-Command", "Set-Service -Name ssh-agent -StartupType Automatic"],
+                capture_output=True,
+                check=False,  # Don't strictly check as it might fail if lacking perms, let Start-Service be the real test
+            )
             subprocess.run(
                 ["powershell", "-Command", "Start-Service ssh-agent"],
                 capture_output=True,
@@ -54,7 +60,7 @@ class SshAgentManager:
             console.log("Service started successfully.")
         except (subprocess.CalledProcessError, FileNotFoundError) as e:
             raise SshAgentError(
-                f"Failed to start ssh-agent service. Please start it manually (as Administrator). Error: {e.stderr}"
+                f"Failed to start ssh-agent service. Please start it manually (as Administrator) by running 'Set-Service ssh-agent -StartupType Automatic; Start-Service ssh-agent'. Error: {getattr(e, 'stderr', str(e))}"
             )
 
     def start(self) -> None:
