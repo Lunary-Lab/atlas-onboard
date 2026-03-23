@@ -85,6 +85,14 @@ class SshAgentManager:
         if paths.is_windows():
             if not self._is_windows_agent_running():
                 self._start_windows_agent()
+                
+                # Wait briefly for service to fully start
+                import time
+                for _ in range(10):
+                    if self._is_windows_agent_running():
+                        break
+                    time.sleep(0.5)
+                
                 if not self._is_windows_agent_running():
                     raise SshAgentError(
                         "OpenSSH Authentication Agent service is not running and could not be started."
