@@ -127,6 +127,9 @@ function Main {
     }
     
     Write-Info "Creating Python virtual environment..."
+    if (Test-Path ".venv") {
+        Remove-Item -Recurse -Force ".venv"
+    }
     & uv venv
     
     Write-Info "Installing dependencies..."

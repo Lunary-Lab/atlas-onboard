@@ -270,6 +270,9 @@ main() {
     
     _info "Creating Python virtual environment with Python $PYTHON_SPEC..."
     
+    # Remove existing venv to prevent 'already exists' errors
+    rm -rf .venv
+    
     # Try to create venv - use --native-tls to work around SSL certificate issues with corporate proxies
     # Temporarily disable exit on error to capture the error
     set +e
@@ -311,6 +314,7 @@ main() {
             
             if [ -n "$PYTHON_PATH" ] && [ -x "$PYTHON_PATH" ]; then
                 _info "Using Python directly from cache: $PYTHON_PATH"
+                rm -rf .venv
                 "$UV_CMD" venv --python "$PYTHON_PATH" --native-tls || _err "Failed to create virtual environment with Python from cache"
             else
                 _err "Failed to create virtual environment. Python 3.11 is installed but cannot be accessed due to SSL certificate issues."
