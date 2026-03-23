@@ -39,9 +39,10 @@ def verify_sha256(file_path: Path, expected_checksum: str) -> None:
 
 def _stream_download(url: str, dest_path: Path, policy_manager, verify: bool) -> None:
     policy_manager.check_write(dest_path)
-    with tempfile.NamedTemporaryFile(delete=False, dir=dest_path.parent) as tmp_file:
-        tmp_path = Path(tmp_file.name)
-        try:
+    tmp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(delete=False, dir=dest_path.parent) as tmp_file:
+            tmp_path = Path(tmp_file.name)
             with httpx.stream(
                 "GET", url, follow_redirects=True, timeout=30.0, verify=verify
             ) as response:
@@ -56,11 +57,14 @@ def _stream_download(url: str, dest_path: Path, policy_manager, verify: bool) ->
                         tmp_file.write(chunk)
                         progress.update(task, advance=len(chunk))
 
-            shutil.move(tmp_path, dest_path)
-        except Exception:
-            if "tmp_path" in locals() and tmp_path.exists():
+        shutil.move(tmp_path, dest_path)
+    except Exception:
+        if tmp_path and tmp_path.exists():
+            try:
                 tmp_path.unlink()
-            raise
+            except Exception:
+                pass
+        raise
 
 
 def download_file(url: str, dest_path: Path, policy_manager) -> None:
