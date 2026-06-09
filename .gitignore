@@ -23,6 +23,7 @@ htmlcov/
 .vscode/
 
 # Atlas Bootstrap
+.env
 payload.tar.zst
 payload.tar.gz
 payload.zip
