@@ -63,7 +63,7 @@ def test_agent_manager_windows_start_service(mocker: MockerFixture):
         pass
 
     assert mock_run.call_count == 3
-    assert "Start-Service ssh-agent" in mock_run.call_args_list[1].args[0]
+    assert "Start-Service ssh-agent" in mock_run.call_args_list[1].args[0][2]
 
 
 def test_agent_add_key(mocker: MockerFixture):

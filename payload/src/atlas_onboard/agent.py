@@ -45,14 +45,14 @@ class SshAgentManager:
     def _start_windows_agent(self) -> None:
         """Attempt to start the Windows OpenSSH Agent service."""
         console.log("Attempting to start Windows OpenSSH Agent service...")
-        
+
         script = """
         $service = Get-Service -Name ssh-agent -ErrorAction SilentlyContinue
         if ($service -eq $null) {
             Write-Error "ssh-agent service not found."
             exit 1
         }
-        
+
         try {
             Set-Service -Name ssh-agent -StartupType Automatic
             Start-Service ssh-agent
@@ -85,15 +85,18 @@ class SshAgentManager:
         if paths.is_windows():
             if not self._is_windows_agent_running():
                 self._start_windows_agent()
-                
+
                 # Wait briefly for service to fully start
                 import time
+
+                agent_running = False
                 for _ in range(10):
                     if self._is_windows_agent_running():
+                        agent_running = True
                         break
                     time.sleep(0.5)
-                
-                if not self._is_windows_agent_running():
+
+                if not agent_running:
                     raise SshAgentError(
                         "OpenSSH Authentication Agent service is not running and could not be started."
                     )
