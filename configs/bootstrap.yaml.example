@@ -1,0 +1,51 @@
+version: 1
+profile: "work"
+
+# Age encryption tool configuration
+age:
+  binary:
+    version: "v1.3.1"
+    checksums_url: "https://github.com/FiloSottile/age/releases/download/v1.3.1/sha256sums.txt"
+  encrypted_key_path: "assets/id_bootstrap.age"  # Optional: path to encrypted key (or use SB_BOOTSTRAP_ENC_KEY_URL env var)
+
+# Git repository configuration
+git:
+  dotfiles_repo: "git@github.com:Lunary-Lab/atlas-dotfiles.git"  # Your dotfiles repository
+  branch: "main"
+  extra_repos: []  # Additional repos to clone during bootstrap (optional)
+
+# Chezmoi dotfiles manager configuration
+# You need to include assets for your platform(s)
+chezmoi:
+  version: "v2.48.1"
+  assets:
+    # Linux x86_64
+    linux_amd64:
+      url: "https://github.com/twpayne/chezmoi/releases/download/v2.48.1/chezmoi_2.48.1_linux_amd64.tar.gz"
+      sha256: "REPLACE_WITH_ACTUAL_SHA256"
+    
+    # macOS Intel
+    darwin_amd64:
+      url: "https://github.com/twpayne/chezmoi/releases/download/v2.48.1/chezmoi_2.48.1_darwin_amd64.tar.gz"
+      sha256: "REPLACE_WITH_ACTUAL_SHA256"
+    
+    # macOS Apple Silicon
+    darwin_arm64:
+      url: "https://github.com/twpayne/chezmoi/releases/download/v2.48.1/chezmoi_2.48.1_darwin_arm64.tar.gz"
+      sha256: "REPLACE_WITH_ACTUAL_SHA256"
+    
+    # Windows x86_64
+    windows_amd64:
+      url: "https://github.com/twpayne/chezmoi/releases/download/v2.48.1/chezmoi_2.48.1_windows_amd64.zip"
+      sha256: "REPLACE_WITH_ACTUAL_SHA256"
+
+# Policy configuration - Which paths are allowed/excluded for syncing
+policy:
+  exclude:
+    - "${HOME}/workspace/**"  # Exclude workspace by default
+
+# Logging configuration
+logging:
+  level: "INFO"
+  json: true
+

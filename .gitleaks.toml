@@ -1,0 +1,8 @@
+[allowlist]
+paths = [
+    '''poetry\.lock''',
+    '''uv\.lock''',
+    '''.*\.lock''',
+    '''.*tests/e2e/setup_e2e_env\.sh''',
+    '''.*tests/e2e/.*'''
+]
